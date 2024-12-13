@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css?family=Reddit+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Bricolage+Grotesque&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Space+Grotesk');
+
+.ttl {
+  color:#EA99A4;
+  text-align: center;
+  font-size: x-large;
+  font-weight: bold;
+  font-family: 'Bricolage Grotesque';
+}
+
+.mn {
+  color:#EA99A4;
+  text-align: center;
+  font-size: xx-large;
+  font-weight: bold;
+  font-family: 'Bricolage Grotesque';
+}
+
+body {
+  background-color: #1E1E1E;
+}
+
+ 
+/* unvisited link */
+a:link {
+  color: hotpink;
+}
+
+/* visited link */
+a:visited {
+  color: #EBB7CB;
+}
+
+/* mouse over link */
+a:hover {
+  color: hotpink;
+}
+
+.footer-content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    color: #EBB7CB;
+    /*border: 1.1px solid white;*/
+    background-color: #1E1E1E;
+    font-size: 12px;
+    font-weight: 200;
+    margin: 0rem 0rem 2rem 9rem;
+}
+
+.socials{
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0rem 0rem 1rem -2rem;
+}
+
+.socials li{
+    margin: 0 0 px;
+}
+
+.socials a{
+    text-decoration: none;
+    color: #fff;
+    /*border: 1.1px solid white;*/
+    padding: 5px;
+    border-radius: 50%;
+}
+
+.socials a i{
+    font-size: 1.1rem;
+    width: 20px;
+    transition: color .4s ease;
+}

@@ -1,0 +1,4 @@
+- source: world_myst.qmd
+  quarto-pub:
+    - id: a5af9829-b36c-41fc-81f6-01cb814fe106
+      url: https://bjnnowak.quarto.pub/mysteries-of-the-world

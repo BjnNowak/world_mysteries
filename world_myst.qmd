@@ -1,0 +1,464 @@
+---
+title: Mysteries of the World
+format: 
+  closeread-html:
+    remove-header-space: true
+    cr-style:
+      section-background-color: "#1E1E1E"
+      narrative-font-family: "Space Grotesk"
+    cr-section:
+      layout: "overlay-center"
+    theme: journal
+    css:
+      - css/main.css
+    include-after-body: 
+      templates/footer.html
+
+---
+
+:::{.cr-section}
+
+:::{#cr-features}
+
+```{r warning=FALSE, message=FALSE, fig.width=12, fig.asp=0.5,dpi=450}
+
+library(tidyverse)
+library(sf)
+library(rnaturalearth)
+
+data<-tibble(
+  name=c("Pentagram","Coca Bottles","Airplane Boneyard","Swastika-Shaped Building Complex","Guitar-Shaped Forest","Human Lips","Desert Breath", "Mysterious Pattern","Noor 3","Maree Man"),
+  latitude=c(52.47986304609943,-18.529243291636256,32.149979790284235,32.67612448089337,-33.86749143724191,12.37063895670614,27.380583,40.452107,31.05970094637304,-29.53304667692803),
+  longitude=c(62.18568583380883,-70.24989384243439,-110.83580951753562,-117.15775271360367,-63.986866436173344,23.322164546089112,33.631839,93.742118,-6.8705536733976444,137.46727641340303)
+)
+
+data_map<-data%>%
+  st_as_sf(coords=c("longitude","latitude"))
+
+st_crs(data_map) = 4326
+
+# Load basemap
+world_110 <- ne_countries(
+  type = "countries",
+  # Choose scale
+  scale = 50,
+  # Return {sf} object
+  returnclass = "sf"      
+)
+
+grat <- st_graticule(lat = c(-89.9, seq(-80, 80, 20), 89.9))
+
+m<-ggplot()+
+  geom_sf(
+    world_110,
+    mapping=aes(geometry=geometry),
+    fill="#F5E3E0",color="dimgrey"
+  )+
+  geom_sf(
+    data_map,
+    mapping=aes(geometry=geometry),
+    fill="#23B5D3",color="white",pch=21,
+    size=6
+  )+
+  geom_sf(
+    grat,
+    mapping=aes(geometry=geometry),
+    color=alpha("white",0.2),linewidth=0.25
+  )+
+  coord_sf(crs='+proj=robin',clip = 'off')+
+  theme_void()+
+  theme(plot.background=element_rect(fill="#1E1E1E",color=NA))
+
+m
+
+```
+
+:::
+
+<span class="mn">Mysteries of the world</span>[@cr-features]
+
+Over the last few decades, the development of satellite imagery has enabled us to see the Earth differently.
+
+Some locations have thus gained new popularity.
+
+Here are the stories behind some of these places.
+
+<span class="ttl">Do aliens drink soda?</span>[@cr-features]{pan-to="70%,-50%" scale-by="3"}
+
+Located on a hillside near the coastal city of Antofagasta, in Chile, a giant Coca-Cola sign was installed in 1986 to commemorate the company’s 100th anniversary.
+
+It was created not from neon or digital lights but from **70,000 glass Coca-Cola bottles**.
+
+```{r}
+#| warning: false
+
+library(leaflet)
+
+sub<-data%>%
+  filter(name=="Coca Bottles")
+
+leaflet(data=sub)%>%
+  addProviderTiles(
+    providers$Esri.WorldImagery,
+    options = providerTileOptions(opacity = 1)
+  )%>%
+  addMarkers(
+    ~longitude, ~latitude,
+    popup = ~as.character(name),
+    label =~as.character(name),
+    group="Mark"
+  )%>% 
+  addLayersControl(
+    overlayGroups = c("Mark"), 
+    options = layersControlOptions(collapsed = F)
+  )
+
+```
+
+The sign has required periodic upkeep to maintain its integrity, including cleaning and replacing damaged bottles. 
+
+Close to the Atacama desert, the dry climate, however, has minimized the need for frequent repairs, helping the sign retain its distinctive appearance over decades.
+
+<span class="ttl">A song of love and leaves</span>[@cr-features]{pan-to="70%,-60%" scale-by="3"}
+
+A **guitar-shaped forest** was conceived and planted in the 1970s by Pedro Martín Ureta, a farmer from General Levalle in Córdoba (Argentina). 
+
+```{r}
+#| warning: false
+
+library(leaflet)
+
+sub<-data%>%
+  filter(name=="Guitar-Shaped Forest")
+
+leaflet(data=sub)%>%
+  addProviderTiles(
+    providers$Esri.WorldImagery,
+    options = providerTileOptions(opacity = 1)
+  )%>%
+  addMarkers(
+    ~longitude, ~latitude,
+    popup = ~as.character(name),
+    label =~as.character(name),
+    group="Mark"
+  )%>% 
+  addLayersControl(
+    overlayGroups = c("Mark"), 
+    options = layersControlOptions(collapsed = F)
+  )
+
+```
+
+There is a sad story behind this forest: it was created as a tribute to Pedros's late wife, Graciela Yraizoz, whose sudden death at the age of 25 deeply impacted him and his family.
+
+Graciela, an artist and music lover, was captivated by the aerial view of a similar landscape design during a plane ride.
+
+She expressed her wish to create something as striking on their own land: a forest shaped like a guitar, her favorite instrument. 
+
+Tragically, she passed away in 1977 before this dream could be realized.
+
+Grief-stricken but determined to honor his wife’s dream, Pedro took over this ambitious project and brought it to a successful conclusion.
+
+Unfortunately, he rarely has the opportunity to admire his creation, as he reportedly has a fear of flying.
+
+<span class="ttl">Home of the sun</span>[@cr-features]{pan-to="20%,40%" scale-by="3"}
+
+Noor 3 is a part of the Noor Ouarzazate Solar Complex, located near the city of Ouarzazate in Morocco.
+
+It is one of the largest concentrated solar power plants in the world.
+
+```{r}
+#| warning: false
+
+library(leaflet)
+
+sub<-data%>%
+  filter(name=="Noor 3")
+
+leaflet(data=sub)%>%
+  addProviderTiles(
+    providers$Esri.WorldImagery,
+    options = providerTileOptions(opacity = 1)
+  )%>%
+  addMarkers(
+    ~longitude, ~latitude,
+    popup = ~as.character(name),
+    label =~as.character(name),
+    group="Mark"
+  )%>% 
+  addLayersControl(
+    overlayGroups = c("Mark"), 
+    options = layersControlOptions(collapsed = F)
+  )
+
+```
+
+It uses 7,400 large, flat mirrors that track the sun throughout the day.
+
+These mirrors, arranged in a circular field, reflect and concentrate sunlight onto the receiver at the top of the central tower.
+
+The receiver absorbs the concentrated sunlight and converts it into heat, which is then converted into energy when required.
+
+<span class="ttl">A lovely place</span>[@cr-features]{pan-to="0%,0%" scale-by="3"}
+
+In Sudan, near the city of Al-Ubayyid a natural geological structure has gained global attention thanks to the development of satellite imagery. 
+
+```{r}
+#| warning: false
+
+library(leaflet)
+
+sub<-data%>%
+  filter(name=="Human Lips")
+
+leaflet(data=sub)%>%
+  addProviderTiles(
+    providers$Esri.WorldImagery,
+    options = providerTileOptions(opacity = 1)
+  )%>%
+  addMarkers(
+    ~longitude, ~latitude,
+    popup = ~as.character(name),
+    label =~as.character(name),
+    group="Mark"
+  )%>% 
+  addLayersControl(
+    overlayGroups = c("Mark"), 
+    options = layersControlOptions(collapsed = F)
+  )
+
+```
+
+The "lips" shape is the result of erosion and natural geological processes over millions of years. 
+
+Wind, rain, and shifting sand dunes have sculpted the hills into their current forms.
+
+The reddish and tan hues of the hill, caused by the region's iron-rich soil and sparse vegetation, enhance its lip-like appearance.
+
+<span class="ttl">Desert Breath</span>[@cr-features]{pan-to="-20%,25%" scale-by="3"}
+
+The "Desert Breath" spiral is a massive land art installation located in the eastern Sahara Desert near the Red Sea, in El Gouna, Egypt. 
+
+```{r}
+#| warning: false
+
+library(leaflet)
+
+sub<-data%>%
+  filter(name=="Desert Breath")
+
+leaflet(data=sub)%>%
+  addProviderTiles(
+    providers$Esri.WorldImagery,
+    options = providerTileOptions(opacity = 1)
+  )%>%
+  addMarkers(
+    ~longitude, ~latitude,
+    popup = ~as.character(name),
+    label =~as.character(name),
+    group="Mark"
+  )%>% 
+  addLayersControl(
+    overlayGroups = c("Mark"), 
+    options = layersControlOptions(collapsed = F)
+  )
+
+```
+
+It  was created in 1997 by a trio of Greek artists: Danae Stratou, Alexandra Stratou, and Stella Constantinides.
+
+The artwork consists of two intertwining spirals, one with mounds of sand and the other with conical depressions, creating a mesmerizing duality.
+
+<span class="ttl">Maree Man</span>[@cr-features]{pan-to="-70%,-70%" scale-by="3"}
+
+The Marree Man, also known as the Stuart's Giant, is a massive geoglyph etched into a remote plateau near the town of Marree in South Australia. 
+
+Discovered in 1998, it remains one of the largest geoglyphs in the world and one of its most enduring mysteries. 
+
+```{r}
+#| warning: false
+
+library(leaflet)
+
+sub<-data%>%
+  filter(name=="Maree Man")
+
+leaflet(data=sub)%>%
+  addProviderTiles(
+    providers$Esri.WorldImagery,
+    options = providerTileOptions(opacity = 1)
+  )%>%
+  addMarkers(
+    ~longitude, ~latitude,
+    popup = ~as.character(name),
+    label =~as.character(name),
+    group="Mark"
+  )%>% 
+  addLayersControl(
+    overlayGroups = c("Mark"), 
+    options = layersControlOptions(collapsed = F)
+  )
+
+```
+
+The figure is approximately 4.2 kilometers tall and spans over 28 kilometers in outline length
+
+Despite extensive investigations, the identity of the creator of the Maree Man remains unknown.
+
+<span class="ttl">A growing mystery</span>[@cr-features]{pan-to="-60%,50%" scale-by="3"}
+
+The mysterious patterns in the Gobi Desert of China have intrigued researchers, satellite observers, and the public since they were first noticed in satellite images. 
+
+These unusual designs, visible in remote areas of the desert, include grids, concentric circles, and irregular patterns, as in the example below.
+
+```{r}
+#| warning: false
+
+library(leaflet)
+
+sub<-data%>%
+  filter(name=="Mysterious Pattern")
+
+leaflet(data=sub)%>%
+  addProviderTiles(
+    providers$Esri.WorldImagery,
+    options = providerTileOptions(opacity = 1)
+  )%>%
+  addMarkers(
+    ~longitude, ~latitude,
+    popup = ~as.character(name),
+    label =~as.character(name),
+    group="Mark"
+  )%>% 
+  addLayersControl(
+    overlayGroups = c("Mark"), 
+    options = layersControlOptions(collapsed = F)
+  )
+
+```
+
+The grids are believed to be used for calibrating Chinese military satellites, testing their resolution and accuracy, while the circles and reflective strips may be radar targets or aids for testing missiles and other weaponry systems.
+
+Satellite images show that new designs appear from time to time, reinforcing the notion that these areas are active testing grounds.
+
+<span class="ttl">Sympathy for the Devil</span>[@cr-features]{pan-to="-30%,70%" scale-by="3"}
+
+A strange symbol can be seen in the city of Lisakovsk, Kazakhstan.
+
+```{r}
+#| warning: false
+
+library(leaflet)
+
+sub<-data%>%
+  filter(name=="Pentagram")
+
+leaflet(data=sub)%>%
+  addProviderTiles(
+    providers$Esri.WorldImagery,
+    options = providerTileOptions(opacity = 1)
+  )%>%
+  addMarkers(
+    ~longitude, ~latitude,
+    popup = ~as.character(name),
+    label =~as.character(name),
+    group="Mark"
+  )%>% 
+  addLayersControl(
+    overlayGroups = c("Mark"), 
+    options = layersControlOptions(collapsed = F)
+  )
+
+```
+
+Rather than an occult symbol, it is a five-pointed red star (*Krasnaya Zvezda*), which was a ubiquitous emblem of Soviet socialism. 
+
+The giant star was built during the Soviet Union, when Lisakovsk was developed as an industrial town to support mining operations in the region.
+
+Since then, it has reportedly undergone periodic maintenance to preserve its structure, ensuring it remains a striking visual feature of Lisakovsk’s skyline.
+
+<span class="ttl">Where plane goes to die</span>[@cr-features]{pan-to="70%,30%" scale-by="3"}
+
+The 309th Aerospace Maintenance and Regeneration Group in Arizona is the largest **airplane boneyard** in the world.
+
+It holds **around 4,000 aircraft**, ranging from fighter jets to cargo planes.
+
+```{r}
+#| warning: false
+
+library(leaflet)
+
+sub<-data%>%
+  filter(name=="Airplane Boneyard")
+
+leaflet(data=sub)%>%
+  addProviderTiles(
+    providers$Esri.WorldImagery,
+    options = providerTileOptions(opacity = 1)
+  )%>%
+  addMarkers(
+    ~longitude, ~latitude,
+    popup = ~as.character(name),
+    label =~as.character(name),
+    group="Mark"
+  )%>% 
+  addLayersControl(
+    overlayGroups = c("Mark"), 
+    options = layersControlOptions(collapsed = F)
+  )
+
+```
+
+It is not just a graveyard for planes, but also a place where rare and historic aircraft are kept as part of aviation history.
+
+<span class="ttl">An unpleasant discovery</span>[@cr-features]{pan-to="80%,30%" scale-by="3"}
+
+In the 1960s, at the height of the Cold War, in the 1960s, at the height of the Cold War, the US Navy undertook construction work to expand on of its military base, in San Diego, Arizona.
+
+Four new buildings arranged around a central courtyard have been constructed, designed to provide accommodation for Navy personnel stationed on the base.
+
+These new constructions did not give rise to controversy **until the popularization of satellite images** in the 2000s, with services such as Google Earth. 
+
+```{r}
+#| warning: false
+
+library(leaflet)
+
+sub<-data%>%
+  filter(name=="Swastika-Shaped Building Complex")
+
+leaflet(data=sub)%>%
+  addProviderTiles(
+    providers$Esri.WorldImagery,
+    options = providerTileOptions(opacity = 1)
+  )%>%
+  addMarkers(
+    ~longitude, ~latitude,
+    popup = ~as.character(name),
+    label =~as.character(name),
+    group="Mark"
+  )%>% 
+  addLayersControl(
+    overlayGroups = c("Mark"), 
+    options = layersControlOptions(collapsed = F)
+  )
+
+```
+
+
+The U.S. Navy stated that the resemblance was entirely coincidental and that the buildings’ shape was not intended to represent a swastika.
+
+There are many other unusual places that can be spotted on satellite images.
+
+Several websites list these locations.
+
+Some references used to create this page:[@cr-features]
+
+[27 weirdest things on Google Earth](https://www.livescience.com/28828-10-strangest-sights-google-earth.html)
+
+[30 Times People Found Such Strange Things On Google Earth, They Just Had To Share Them](https://www.boredpanda.com/google-earth-structures-anomalies/)
+
+
+:::
+
+<br><br>
